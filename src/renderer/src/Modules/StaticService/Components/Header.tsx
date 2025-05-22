@@ -2,7 +2,7 @@ import { ROUTES } from '@renderer/Router/Routes'
 import { ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router'
 
-export default function Header() {
+export default function Header(props: HeaderProps) {
   return (
     <header className="mb-8">
       <Link
@@ -13,11 +13,14 @@ export default function Header() {
         Volver al panel
       </Link>
       <h1 className="text-3xl font-extralight tracking-tight text-gray-900 dark:text-white">
-        Agregar Sitio Estático
+        {props.title}
       </h1>
-      <p className="mt-2 text-gray-600 dark:text-gray-300">
-        Configura los detalles para tu nuevo sitio web estático
-      </p>
+      <p className="mt-2 text-gray-600 dark:text-gray-300">{props.subtitle}</p>
     </header>
   )
+}
+
+interface HeaderProps {
+  title?: string
+  subtitle?: string
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { CreateStaticServiceOutput } from '../Ports/Outputs'
+import { useNavigate } from 'react-router'
 
 export default function useCreateStaticService() {
+  const navigate = useNavigate()
   const [staticService, setStaticService] = useState<CreateStaticServiceOutput>({
     name: '',
     projectPath: '',
@@ -20,6 +22,7 @@ export default function useCreateStaticService() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     alert(JSON.stringify(staticService))
+    navigate('/service/1')
     console.log('Formulario enviado')
   }
 

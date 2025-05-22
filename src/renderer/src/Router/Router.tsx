@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouteObject } from 'react-router'
 import { ROUTES } from './Routes'
 import { DashboardPage } from '@renderer/Modules/Dashboard'
-import AddStaticService from '@renderer/Modules/StaticService/Pages'
+import { AddStaticService } from '@renderer/Modules/StaticService/Pages'
 import AddService from '@renderer/Modules/Service/Pages'
+import ServiceDetails from '@renderer/Modules/StaticService/Pages/ServiceDetails'
 
 const routes: RouteObject[] = [
   {
@@ -16,6 +17,10 @@ const routes: RouteObject[] = [
   {
     path: ROUTES.ADD_SERVICE,
     element: <AddService />
+  },
+  {
+    path: ROUTES.SERVICE_DETAILS,
+    element: <ServiceDetails />
   }
 ]
 
