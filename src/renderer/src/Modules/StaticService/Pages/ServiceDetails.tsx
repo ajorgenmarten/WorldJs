@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Header from '../Components/Header'
+import Header from '../../../Common/Components/Header'
 import { PlayCircle, StopCircle, RefreshCcwDot, Terminal, Settings, Trash2 } from 'lucide-react'
 import { Link } from 'react-router'
 

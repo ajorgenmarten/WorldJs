@@ -1,6 +1,6 @@
 import { Folder } from 'lucide-react'
 import { Link } from 'react-router'
-import Header from '../Components/Header'
+import Header from '../../../Common/Components/Header'
 import EnvVars from '../Components/EnvVars'
 import InputGroup from '../Components/InputGroup'
 import useCreateStaticService from '../Hooks/UseCreateStaticService'
