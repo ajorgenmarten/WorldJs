@@ -26,11 +26,14 @@ export default function useCreateStaticService() {
     console.log('Formulario enviado')
   }
 
-  const handleFolderSelect = () => {
-    setStaticService((prevState) => ({
-      ...prevState,
-      projectPath: '/usuarios/proyectos/mi-proyecto'
-    }))
+  const handleFolderSelect = async () => {
+    const projectPath = await window.electron.ipcRenderer.invoke('services:open-folder-dialog')
+    if (typeof projectPath === 'string') {
+      setStaticService((prevState) => ({
+        ...prevState,
+        projectPath
+      }))
+    }
   }
 
   const addEnvVar = () => {

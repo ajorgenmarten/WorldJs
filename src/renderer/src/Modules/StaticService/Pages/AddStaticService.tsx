@@ -18,7 +18,7 @@ export function AddStaticService() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-[#0f0f0f] dark:to-[#050505]">
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <Header
           title="Agregar Sitio Estático"
           subtitle="Configura los detalles para tu nuevo sitio web estático"
