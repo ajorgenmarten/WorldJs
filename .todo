@@ -1,0 +1,3 @@
+* Terminar de compatibilizar los modelos de la base de datos con las entidades del main process y del renderer
+* Correr migraciones y generar tipos
+* Modificar las interfaces de acorde a los modelos de la base de datos

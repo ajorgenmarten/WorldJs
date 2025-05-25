@@ -1,6 +1,6 @@
 # worldjs
 
-An Electron application with React and TypeScript
+An Electron application with React and TypeScript for test env in local mode with Docker.
 
 ## Recommended IDE Setup
 

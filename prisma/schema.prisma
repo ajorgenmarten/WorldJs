@@ -13,16 +13,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model StaticService {
-  id           String   @id @default(uuid())
-  name         String
-  slug         String   @unique
-  projectPath  String
+model Service {
+  id        String   @id @default(uuid())
+  /**
+   * Nombre amigable y descriptivo que le quiera dar el usuario
+   */
+  name      String
+  /**
+   * Nombre que se va a usar como nombre de servicio y de contenedor en docker
+   */
+  slug      String   @unique
+  /**
+   * Esta es la ruta donde se ecuentra el proyecto
+   */
+  port      Int      @default(80)
+  /**
+   * Indica si el servicio está expuesto públicamente o no.
+   */
+  exposed   Boolean  @default(false)
+  /**
+   * Fecha de creación del servicio
+   */
+  createdAt DateTime @default(now())
+  /**
+   * Fecha de actualización del servicio
+   */
+  updatedAt DateTime @updatedAt
+}
+
+model BuildiableService {
+  serviceId    String  @unique
+  /**
+   * Esta es la ruta donde se ecuentra el proyecto
+   */
+  folderPath   String
+  /**
+   * A partir de esta ruta es desde donde se van a ejecutar los comando en caso de haber alguno
+   */
   rootDir      String?
+  /**
+   * Comando que se va a ejecutar para construir el proyecto
+   */
   buildCommand String?
-  publishDir   String?
-  port         Int
+  /**
+   * URL de acceso  en caso de que se quiera definir alguna
+   */
+  url          String? @unique
+  /**
+   * Variables de entorno que se van a usar en el servicio
+   */
   envVars      Json?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+}
+
+model StaticService {
+  buildiableServiceId String  @unique
+  /**
+   * En el contexto de despliegue web (por ejemplo, usando Apache o Nginx), la "ruta donde se va a publicar el proyecto" normalmente se refiere al path base o base URL desde donde tu aplicación será accesible públicamente. Por ejemplo:
+   * Si tu aplicación se sirve desde https://midominio.com/miapp, la ruta base es /miapp.
+   * Si se sirve desde la raíz (https://midominio.com/), la ruta base es /.
+   */
+  publishDir          String?
+}
+
+model PostgresService {
+  serviceId String  @unique
+  user      String
+  password  String
+  database  String?
+}
+
+model NodejsService {
+  buildiableServiceId String @unique
+  startCommand        String
 }
