@@ -39,6 +39,10 @@ model Service {
    * Fecha de actualización del servicio
    */
   updatedAt DateTime @updatedAt
+
+  BuildiableService BuildiableService?
+
+  PostgresService PostgresService?
 }
 
 model BuildiableService {
@@ -63,6 +67,12 @@ model BuildiableService {
    * Variables de entorno que se van a usar en el servicio
    */
   envVars      Json?
+
+  Service Service @relation(fields: [serviceId], references: [id])
+
+  StaticService StaticService?
+
+  NodeJsService NodejsService?
 }
 
 model StaticService {
@@ -73,16 +83,34 @@ model StaticService {
    * Si se sirve desde la raíz (https://midominio.com/), la ruta base es /.
    */
   publishDir          String?
+
+  BuildiableService BuildiableService @relation(fields: [buildiableServiceId], references: [serviceId])
 }
 
 model PostgresService {
   serviceId String  @unique
-  user      String
+  /**
+   * Nombre de usuario para conectarse a la base de datos
+   */
+  user      String  @default("postgres")
+  /**
+   * Constrasena para conectarse a la base de datos
+   */
   password  String
+  /**
+   * Nombre de la base de datos que se va a crear por defecto
+   */
   database  String?
+
+  Service Service @relation(fields: [serviceId], references: [id])
 }
 
 model NodejsService {
   buildiableServiceId String @unique
+  /**
+   * Comando para empezar a correr el servicio
+   */
   startCommand        String
+
+  BuildiableService BuildiableService @relation(fields: [buildiableServiceId], references: [serviceId])
 }

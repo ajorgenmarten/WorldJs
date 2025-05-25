@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouteObject } from 'react-router'
 import { ROUTES } from './Routes'
-import { DashboardPage } from '@renderer/Modules/Dashboard'
+import { Dashboard } from '@renderer/Modules/Dashboard'
 import { AddStaticService } from '@renderer/Modules/StaticService/Pages'
 import AddService from '@renderer/Modules/Service/Pages'
 import ServiceDetails from '@renderer/Modules/StaticService/Pages/ServiceDetails'
@@ -8,7 +8,7 @@ import ServiceDetails from '@renderer/Modules/StaticService/Pages/ServiceDetails
 const routes: RouteObject[] = [
   {
     path: ROUTES.DASHBOARD,
-    element: <DashboardPage />
+    element: <Dashboard />
   },
   {
     path: ROUTES.ADD_STATIC,
