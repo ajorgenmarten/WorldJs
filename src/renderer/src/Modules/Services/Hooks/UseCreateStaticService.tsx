@@ -33,14 +33,27 @@ export default function useCreateStaticService() {
   const handleLoadEnv = async () => {
     console.log('Env loaded')
   }
-  const handleAddVar = async () => {
-    console.log('Hola mundo')
+  const handleAddVar = () => {
+    setService((prev) => {
+      if (!prev.envVars) prev.envVars = [{ key: '', value: '' }]
+      else prev.envVars = [...prev.envVars, { key: '', value: '' }]
+      return { ...prev }
+    })
   }
   const handleRemoveVar = async (index: number) => {
-    console.log(index)
+    setService((prev) => {
+      const newEvnVars = prev.envVars?.filter((_, i) => i !== index)
+      prev.envVars = newEvnVars || []
+      return { ...prev }
+    })
   }
   const handleUpdateVar = async (index: number, field: 'key' | 'value', value: string) => {
-    console.log(index, field, value)
+    setService((prev) => {
+      if (!prev.envVars) prev.envVars = []
+      if (!prev.envVars[index]) prev.envVars[index] = { key: '', value: '' }
+      else prev.envVars[index][field] = value
+      return { ...prev }
+    })
   }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
