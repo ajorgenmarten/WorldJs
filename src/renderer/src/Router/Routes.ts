@@ -1,8 +1,11 @@
 export const ROUTES = {
   DASHBOARD: '/',
-  ADD_STATIC: '/new/static-site',
-  SERVICE_DETAILS: '/service/:id',
-  ADD_SERVICE: '/new/service',
+  NEW_SERVICE: '/new',
+  NEW_STATIC: '/new/static',
+  NEW_NODEJS: '/new/nodejs',
+  NEW_POSTGRES: '/new/postgres',
+  NEW_REDIS: '/new/redis',
+  NEW_NATS: '/new/nats',
   ALL_SERVICES: '/all',
   SETTINGS: '/settings'
 }

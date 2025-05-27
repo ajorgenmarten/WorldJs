@@ -1,11 +1,13 @@
 import type React from 'react'
 
 import { useState } from 'react'
-import { ArrowLeft, Plus, Upload, X, FolderOpen } from 'lucide-react'
+import { Plus, Upload, X, FolderOpen } from 'lucide-react'
 import { Button } from '@renderer/Common/Components/ui/button'
 import { Input } from '@renderer/Common/Components/ui/input'
 import { Label } from '@renderer/Common/Components/ui/label'
 import { Switch } from '@renderer/Common/Components/ui/switch'
+import Header from '../Components/Header'
+import Footer from '@renderer/Common/Components/Footer'
 
 interface EnvVar {
   key: string
@@ -93,23 +95,7 @@ export default function CreateNodejsService() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="pt-8 pb-8">
-        <div className="max-w-4xl mx-auto px-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-600 hover:text-gray-800"
-              onClick={() => window.history.back()}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver
-            </Button>
-          </div>
-          <h1 className="text-2xl font-normal text-gray-700">Crear Servicio Node.js</h1>
-          <p className="text-gray-600 text-sm mt-2">Configura tu nueva aplicación Node.js</p>
-        </div>
-      </div>
+      <Header title="Crear Servicio Node.js" subtitle="Configura tu nueva aplicación Node.js" />
 
       {/* Form */}
       <div className="max-w-4xl mx-auto px-8 pb-16">
@@ -343,9 +329,7 @@ export default function CreateNodejsService() {
       </div>
 
       {/* Footer */}
-      <div className="text-center text-xs text-gray-500 pb-8">
-        © 2025 • Diseñado con simplicidad
-      </div>
+      <Footer />
     </div>
   )
 }

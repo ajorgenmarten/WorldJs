@@ -1,6 +1,8 @@
 import { Globe, Server, Grid3X3, Settings, LucideProps } from 'lucide-react'
 import { ForwardRefExoticComponent, RefAttributes } from 'react'
 import DashboardOption from '../Components/DashboardOption'
+import { ROUTES } from '@renderer/Router/Routes'
+import Footer from '@renderer/Common/Components/Footer'
 
 export type DashboardItem = {
   title: string
@@ -8,7 +10,7 @@ export type DashboardItem = {
   icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>
   bgColor: string
   iconColor: string
-  action: () => void
+  href: string
 }
 
 const DashboardItems: DashboardItem[] = [
@@ -18,7 +20,7 @@ const DashboardItems: DashboardItem[] = [
     icon: Globe,
     bgColor: 'bg-blue-50',
     iconColor: 'text-blue-600',
-    action: () => console.log('Crear sitio estático')
+    href: ROUTES.NEW_STATIC
   },
   {
     title: 'Servicio',
@@ -26,7 +28,7 @@ const DashboardItems: DashboardItem[] = [
     icon: Server,
     bgColor: 'bg-green-50',
     iconColor: 'text-green-600',
-    action: () => console.log('Crear servicio dinámico')
+    href: ROUTES.NEW_SERVICE
   },
   {
     title: 'Ver Todos',
@@ -34,7 +36,7 @@ const DashboardItems: DashboardItem[] = [
     icon: Grid3X3,
     bgColor: 'bg-yellow-50',
     iconColor: 'text-yellow-600',
-    action: () => console.log('Ver servicios')
+    href: ROUTES.ALL_SERVICES
   },
   {
     title: 'Ajustes',
@@ -42,7 +44,7 @@ const DashboardItems: DashboardItem[] = [
     icon: Settings,
     bgColor: 'bg-purple-50',
     iconColor: 'text-purple-600',
-    action: () => console.log('Abrir ajustes')
+    href: ROUTES.SETTINGS
   }
 ]
 
@@ -63,10 +65,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="text-center text-xs text-gray-500 pb-8">
-        © 2025 • Diseñado con simplicidad
-      </div>
+      <Footer />
     </div>
   )
 }

@@ -1,9 +1,11 @@
 import { createBrowserRouter, RouteObject } from 'react-router'
 import { ROUTES } from './Routes'
 import { Dashboard } from '@renderer/Modules/Dashboard'
-import { AddStaticService } from '@renderer/Modules/StaticService/Pages'
-import AddService from '@renderer/Modules/Service/Pages'
-import ServiceDetails from '@renderer/Modules/StaticService/Pages/ServiceDetails'
+import CreateStaticService from '@renderer/Modules/Services/Pages/CreateStaticService'
+import SelectService from '@renderer/Modules/Services/Pages/SelectService'
+import CreateNodejsService from '@renderer/Modules/Services/Pages/CreateNodeJsService'
+import CreatePostgresService from '@renderer/Modules/Services/Pages/CreatePostgresService'
+import PageNotFound from '@renderer/Common/Components/PageNotFound'
 
 const routes: RouteObject[] = [
   {
@@ -11,16 +13,24 @@ const routes: RouteObject[] = [
     element: <Dashboard />
   },
   {
-    path: ROUTES.ADD_STATIC,
-    element: <AddStaticService />
+    path: ROUTES.NEW_STATIC,
+    element: <CreateStaticService />
   },
   {
-    path: ROUTES.ADD_SERVICE,
-    element: <AddService />
+    path: ROUTES.NEW_SERVICE,
+    element: <SelectService />
   },
   {
-    path: ROUTES.SERVICE_DETAILS,
-    element: <ServiceDetails />
+    path: ROUTES.NEW_NODEJS,
+    element: <CreateNodejsService />
+  },
+  {
+    path: ROUTES.NEW_POSTGRES,
+    element: <CreatePostgresService />
+  },
+  {
+    path: '*',
+    element: <PageNotFound />
   }
 ]
 
