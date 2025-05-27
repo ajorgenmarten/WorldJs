@@ -1,9 +1,9 @@
-export interface IEnvVar {
+export interface EnvVar {
   key: string
   value: string
 }
 
-export interface IService {
+export interface Service {
   id: string
   name: string
   slug: string
@@ -13,24 +13,24 @@ export interface IService {
   updatedAt: Date
 }
 
-export interface IBuildiableService extends IService {
+export interface BuildiableService extends Service {
   folderPath: string
   rootDir: string | null
   buildCommand: string | null
   url: string | null
-  envVars: IEnvVar[] | null
+  envVars: EnvVar[] | null
 }
 
-export interface IStaticService extends IBuildiableService {
+export interface StaticService extends BuildiableService {
   publishDir: string | null
 }
 
-export interface IPostgresService extends IService {
+export interface PostgresService extends Service {
   user: string
   password: string
   database: string | null
 }
 
-export interface INodejsService extends IBuildiableService {
+export interface NodejsService extends BuildiableService {
   startCommand: string
 }

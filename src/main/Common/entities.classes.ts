@@ -1,78 +1,248 @@
 import { v4 as uuid } from 'uuid'
-import { IEnvVar, IStaticService } from './entities.defs'
+import { IEnvVar, IStaticService, IService, IBuildiableService } from './entities.defs'
 
-export class StaticService implements IStaticService {
+function createSlug(name: string): string {
+  return name
+    .trim()
+    .toLowerCase() // Convertir a minúsculas
+    .normalize('NFD') // Normalizar caracteres especiales
+    .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos y diacríticos
+    .replace(/\s+/g, '-') // Reemplazar espacios con guiones
+    .replace(/[^a-z0-9-]/g, '') // Eliminar caracteres no permitidos
+    .replace(/-+/g, '-') // Evitar múltiples guiones consecutivos
+    .trim() // Eliminar espacios al inicio y al final
+}
+
+export class Service implements IService {
   constructor(
     private readonly _id: string,
     private _name: string,
     private _slug: string,
-    private _projectPath: string,
-    private _rootDir: string | null,
-    private _buildCommand: string | null,
-    private _publishDir: string | null,
-    private _prot: number,
-    private _envVars: IEnvVar[] | null,
+    private _port: number,
+    private _exposed: boolean,
     private _createdAt: Date,
     private _updatedAt: Date
   ) {}
 
-  get id() {
+  get id(): string {
     return this._id
   }
-  get name() {
+  get name(): string {
     return this._name
   }
-  get slug() {
+  get slug(): string {
     return this._slug
   }
-  get projectPath() {
-    return this._projectPath
+  get port(): number {
+    return this._port
   }
-  get rootDir() {
-    return this._rootDir
+  get exposed(): boolean {
+    return this._exposed
   }
-  get buildCommand() {
-    return this._buildCommand
-  }
-  get publishDir() {
-    return this._publishDir
-  }
-  get port() {
-    return this._prot
-  }
-  get envVars() {
-    return this._envVars
-  }
-  get updatedAt() {
-    return this._updatedAt
-  }
-  get createdAt() {
+  get createdAt(): Date {
     return this._createdAt
   }
-  static new(
+  get updatedAt(): Date {
+    return this._updatedAt
+  }
+  static newService(name: string, port: number, exposed: boolean) {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = createSlug(name)
+    return new Service(id, name, slug, port, exposed, dateNow, dateNow)
+  }
+}
+
+export class BuildiableService extends Service implements IBuildiableService {
+  constructor(
+    _id: string,
+    _name: string,
+    _slug: string,
+    _port: number,
+    _exposed: boolean,
+    private _folderPath: string,
+    private _rootDir: string | null,
+    private _buildCommand: string | null,
+    private _url: string | null,
+    private _evnVars: IEnvVar[] | null,
+    _createdAt: Date,
+    _updatedAt: Date
+  ) {
+    super(_id, _name, _slug, _port, _exposed, _createdAt, _updatedAt)
+  }
+  get folderPath(): string {
+    return this._folderPath
+  }
+  get rootDir(): string | null {
+    return this._rootDir
+  }
+  get buildCommand(): string | null {
+    return this._buildCommand
+  }
+  get url(): string | null {
+    return this._url
+  }
+  get envVars(): IEnvVar[] | null {
+    return this._evnVars
+  }
+  static newBuildableService(
     name: string,
-    projectPath: string,
-    rootDir: string | null,
-    buildCommand: string | null,
-    publishDir: string | null,
     port: number,
-    envVars: IEnvVar[] | null,
-    slug?: string
+    exposed: boolean,
+    folderPath: string,
+    rootDir: string | null = null,
+    buildCommand: string | null = null,
+    url: string | null = null,
+    envVars: IEnvVar[] | null = null
+  ): BuildiableService {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = createSlug(name)
+    return new BuildiableService(
+      id,
+      name,
+      slug,
+      port,
+      exposed,
+      folderPath,
+      rootDir,
+      buildCommand,
+      url,
+      envVars,
+      dateNow,
+      dateNow
+    )
+  }
+}
+
+export class StaticService extends BuildiableService implements IStaticService {
+  constructor(
+    _id: string,
+    _name: string,
+    _slug: string,
+    _port: number,
+    _exposed: boolean,
+    _folderPath: string,
+    _rootDir: string | null,
+    _buildCommand: string | null,
+    _url: string | null,
+    _evnVars: IEnvVar[] | null,
+    private _publishDir: string | null,
+    _createdAt: Date,
+    _updatedAt: Date
+  ) {
+    super(
+      _id,
+      _name,
+      _slug,
+      _port,
+      _exposed,
+      _folderPath,
+      _rootDir,
+      _buildCommand,
+      _url,
+      _evnVars,
+      _createdAt,
+      _updatedAt
+    )
+  }
+  get publishDir(): string | null {
+    return this._publishDir
+  }
+  static newStaticService(
+    name: string,
+    port: number,
+    exposed: boolean,
+    folderPath: string,
+    rootDir: string | null = null,
+    buildCommand: string | null = null,
+    url: string | null = null,
+    envVars: IEnvVar[] | null = null,
+    publishDir: string | null = null
   ) {
     const id = uuid()
-    const date = new Date()
+    const dateNow = new Date()
+    const slug = createSlug(name)
     return new StaticService(
       id,
       name,
-      slug ?? name.trim().toLowerCase().replace(/\s/g, '-'),
-      projectPath,
+      slug,
+      port,
+      exposed,
+      folderPath,
       rootDir,
       buildCommand,
-      publishDir,
-      port,
+      url,
       envVars,
-      date,
-      date
+      publishDir,
+      dateNow,
+      dateNow
+    )
+  }
+}
+
+export class NodejsService extends BuildiableService {
+  constructor(
+    _id: string,
+    _name: string,
+    _slug: string,
+    _port: number,
+    _exposed: boolean,
+    _folderPath: string,
+    _rootDir: string | null,
+    _buildCommand: string | null,
+    _url: string | null,
+    _evnVars: IEnvVar[] | null,
+    private _startCommand: string,
+    _createdAt: Date,
+    _updatedAt: Date
+  ) {
+    super(
+      _id,
+      _name,
+      _slug,
+      _port,
+      _exposed,
+      _folderPath,
+      _rootDir,
+      _buildCommand,
+      _url,
+      _evnVars,
+      _createdAt,
+      _updatedAt
+    )
+  }
+  get startCommand(): string {
+    return this._startCommand
+  }
+  static newNodejsService(
+    name: string,
+    port: number,
+    exposed: boolean,
+    folderPath: string,
+    rootDir: string | null = null,
+    buildCommand: string | null = null,
+    url: string | null = null,
+    envVars: IEnvVar[] | null = null,
+    startCommand: string
+  ): NodejsService {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = createSlug(name)
+    return new NodejsService(
+      id,
+      name,
+      slug,
+      port,
+      exposed,
+      folderPath,
+      rootDir,
+      buildCommand,
+      url,
+      envVars,
+      startCommand,
+      dateNow,
+      dateNow
     )
   }
 }
