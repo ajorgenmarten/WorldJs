@@ -5,8 +5,13 @@ import Dialogs from './Application/Diagos'
 export default class ServiceController {
   constructor(@Inject(Dialogs) private readonly _dialogs: Dialogs) {}
 
-  @OnInvoke('open-folder-dialog')
+  @OnInvoke('select-folder')
   async openFolderDialog() {
-    return await this._dialogs.getFolderPath()
+    return await this._dialogs.selectFolder()
+  }
+
+  @OnInvoke('load-envs')
+  async loadEnvs() {
+    return await this._dialogs.loadEnvVars()
   }
 }

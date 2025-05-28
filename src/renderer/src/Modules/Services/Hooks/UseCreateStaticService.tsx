@@ -28,10 +28,20 @@ export default function useCreateStaticService() {
     })
   }
   const handleSelectFolder = async () => {
-    console.log('Hola mundo')
+    const path = await window.electron.ipcRenderer.invoke('services:select-folder')
+    if (!path) return
+    setService((prev) => {
+      prev.folderPath = path
+      return { ...prev }
+    })
   }
   const handleLoadEnv = async () => {
-    console.log('Env loaded')
+    const data = await window.electron.ipcRenderer.invoke('services:load-envs')
+    if (!data) return
+    setService((prev) => {
+      prev.envVars = data
+      return { ...prev }
+    })
   }
   const handleAddVar = () => {
     setService((prev) => {
