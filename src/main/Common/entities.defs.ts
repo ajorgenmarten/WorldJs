@@ -13,7 +13,7 @@ export interface IService {
   updatedAt: Date
 }
 
-export interface IBuildiableService extends IService {
+export interface IBuildableService extends IService {
   folderPath: string
   rootDir: string | null
   buildCommand: string | null
@@ -21,7 +21,7 @@ export interface IBuildiableService extends IService {
   envVars: IEnvVar[] | null
 }
 
-export interface IStaticService extends IBuildiableService {
+export interface IStaticService extends IBuildableService {
   publishDir: string | null
 }
 
@@ -31,6 +31,6 @@ export interface IPostgresService extends IService {
   database: string | null
 }
 
-export interface INodejsService extends IBuildiableService {
+export interface INodejsService extends IBuildableService {
   startCommand: string
 }

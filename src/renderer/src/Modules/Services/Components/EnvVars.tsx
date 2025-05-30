@@ -1,7 +1,7 @@
 import { Button } from '@renderer/Common/Components/ui/button'
 import { Input } from '@renderer/Common/Components/ui/input'
 import { Label } from '@renderer/Common/Components/ui/label'
-import { EnvVar } from '@renderer/Common/Hooks/types.defs'
+import { EnvVar } from '@renderer/Common/Types/types.defs'
 import { Plus, Trash, Upload } from 'lucide-react'
 
 export default function EnvVars(props: EnvVarsProps) {

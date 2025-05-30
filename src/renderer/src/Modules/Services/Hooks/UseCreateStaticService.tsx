@@ -1,4 +1,4 @@
-import { StaticService } from '@renderer/Common/Hooks/types.defs'
+import { CreateStaticServiceRequest } from '@ports/services.ports'
 import { useState } from 'react'
 
 export default function useCreateStaticService() {
@@ -67,7 +67,8 @@ export default function useCreateStaticService() {
   }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    console.log(service)
+    const data = await window.electron.ipcRenderer.invoke('services:add-static-service', service)
+    console.log(data)
   }
 
   return {
@@ -82,5 +83,3 @@ export default function useCreateStaticService() {
     handleSubmit
   }
 }
-
-type CreateStaticServiceRequest = Omit<StaticService, 'id' | 'slug' | 'createdAt' | 'updatedAt'>

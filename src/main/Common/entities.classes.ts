@@ -1,17 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { IEnvVar, IStaticService, IService, IBuildiableService } from './entities.defs'
-
-function createSlug(name: string): string {
-  return name
-    .trim()
-    .toLowerCase() // Convertir a minúsculas
-    .normalize('NFD') // Normalizar caracteres especiales
-    .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos y diacríticos
-    .replace(/\s+/g, '-') // Reemplazar espacios con guiones
-    .replace(/[^a-z0-9-]/g, '') // Eliminar caracteres no permitidos
-    .replace(/-+/g, '-') // Evitar múltiples guiones consecutivos
-    .trim() // Eliminar espacios al inicio y al final
-}
+import { IEnvVar, IStaticService, IService, IBuildableService } from './entities.defs'
 
 export class Service implements IService {
   constructor(
@@ -45,15 +33,9 @@ export class Service implements IService {
   get updatedAt(): Date {
     return this._updatedAt
   }
-  static newService(name: string, port: number, exposed: boolean) {
-    const id = uuid()
-    const dateNow = new Date()
-    const slug = createSlug(name)
-    return new Service(id, name, slug, port, exposed, dateNow, dateNow)
-  }
 }
 
-export class BuildiableService extends Service implements IBuildiableService {
+export class BuildableService extends Service implements IBuildableService {
   constructor(
     _id: string,
     _name: string,
@@ -85,37 +67,9 @@ export class BuildiableService extends Service implements IBuildiableService {
   get envVars(): IEnvVar[] | null {
     return this._evnVars
   }
-  static newBuildableService(
-    name: string,
-    port: number,
-    exposed: boolean,
-    folderPath: string,
-    rootDir: string | null = null,
-    buildCommand: string | null = null,
-    url: string | null = null,
-    envVars: IEnvVar[] | null = null
-  ): BuildiableService {
-    const id = uuid()
-    const dateNow = new Date()
-    const slug = createSlug(name)
-    return new BuildiableService(
-      id,
-      name,
-      slug,
-      port,
-      exposed,
-      folderPath,
-      rootDir,
-      buildCommand,
-      url,
-      envVars,
-      dateNow,
-      dateNow
-    )
-  }
 }
 
-export class StaticService extends BuildiableService implements IStaticService {
+export class StaticService extends BuildableService implements IStaticService {
   constructor(
     _id: string,
     _name: string,
@@ -149,39 +103,9 @@ export class StaticService extends BuildiableService implements IStaticService {
   get publishDir(): string | null {
     return this._publishDir
   }
-  static newStaticService(
-    name: string,
-    port: number,
-    exposed: boolean,
-    folderPath: string,
-    rootDir: string | null = null,
-    buildCommand: string | null = null,
-    url: string | null = null,
-    envVars: IEnvVar[] | null = null,
-    publishDir: string | null = null
-  ) {
-    const id = uuid()
-    const dateNow = new Date()
-    const slug = createSlug(name)
-    return new StaticService(
-      id,
-      name,
-      slug,
-      port,
-      exposed,
-      folderPath,
-      rootDir,
-      buildCommand,
-      url,
-      envVars,
-      publishDir,
-      dateNow,
-      dateNow
-    )
-  }
 }
 
-export class NodejsService extends BuildiableService {
+export class NodejsService extends BuildableService {
   constructor(
     _id: string,
     _name: string,
@@ -215,7 +139,55 @@ export class NodejsService extends BuildiableService {
   get startCommand(): string {
     return this._startCommand
   }
-  static newNodejsService(
+}
+
+export class ServicesFactory {
+  private static genSlug(name: string): string {
+    return name
+      .trim()
+      .toLowerCase() // Convertir a minúsculas
+      .normalize('NFD') // Normalizar caracteres especiales
+      .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos y diacríticos
+      .replace(/\s+/g, '-') // Reemplazar espacios con guiones
+      .replace(/[^a-z0-9-]/g, '') // Eliminar caracteres no permitidos
+      .replace(/-+/g, '-') // Evitar múltiples guiones consecutivos
+      .trim() // Eliminar espacios al inicio y al final
+  }
+  static Service(name: string, port: number, exposed: boolean) {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = this.genSlug(name)
+    return new Service(id, name, slug, port, exposed, dateNow, dateNow)
+  }
+  static BuildableService(
+    name: string,
+    port: number,
+    exposed: boolean,
+    folderPath: string,
+    rootDir: string | null = null,
+    buildCommand: string | null = null,
+    url: string | null = null,
+    envVars: IEnvVar[] | null = null
+  ) {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = this.genSlug(name)
+    return new BuildableService(
+      id,
+      name,
+      slug,
+      port,
+      exposed,
+      folderPath,
+      rootDir,
+      buildCommand,
+      url,
+      envVars,
+      dateNow,
+      dateNow
+    )
+  }
+  static NodeJsService(
     name: string,
     port: number,
     exposed: boolean,
@@ -225,10 +197,10 @@ export class NodejsService extends BuildiableService {
     url: string | null = null,
     envVars: IEnvVar[] | null = null,
     startCommand: string
-  ): NodejsService {
+  ) {
     const id = uuid()
     const dateNow = new Date()
-    const slug = createSlug(name)
+    const slug = this.genSlug(name)
     return new NodejsService(
       id,
       name,
@@ -241,6 +213,36 @@ export class NodejsService extends BuildiableService {
       url,
       envVars,
       startCommand,
+      dateNow,
+      dateNow
+    )
+  }
+  static StaticService(
+    name: string,
+    port: number,
+    exposed: boolean,
+    folderPath: string,
+    rootDir: string | null = null,
+    buildCommand: string | null = null,
+    url: string | null = null,
+    envVars: IEnvVar[] | null = null,
+    publishDir: string | null = null
+  ) {
+    const id = uuid()
+    const dateNow = new Date()
+    const slug = this.genSlug(name)
+    return new StaticService(
+      id,
+      name,
+      slug,
+      port,
+      exposed,
+      folderPath,
+      rootDir,
+      buildCommand,
+      url,
+      envVars,
+      publishDir,
       dateNow,
       dateNow
     )

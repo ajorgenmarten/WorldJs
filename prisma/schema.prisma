@@ -40,12 +40,12 @@ model Service {
    */
   updatedAt DateTime @updatedAt
 
-  BuildiableService BuildiableService?
+  BuildiableService BuildableService?
 
   PostgresService PostgresService?
 }
 
-model BuildiableService {
+model BuildableService {
   serviceId    String  @unique
   /**
    * Esta es la ruta donde se ecuentra el proyecto
@@ -84,7 +84,7 @@ model StaticService {
    */
   publishDir          String?
 
-  BuildiableService BuildiableService @relation(fields: [buildiableServiceId], references: [serviceId])
+  BuildiableService BuildableService @relation(fields: [buildiableServiceId], references: [serviceId])
 }
 
 model PostgresService {
@@ -112,5 +112,5 @@ model NodejsService {
    */
   startCommand        String
 
-  BuildiableService BuildiableService @relation(fields: [buildiableServiceId], references: [serviceId])
+  BuildiableService BuildableService @relation(fields: [buildiableServiceId], references: [serviceId])
 }
