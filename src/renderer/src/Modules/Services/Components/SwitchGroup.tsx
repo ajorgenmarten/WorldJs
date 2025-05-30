@@ -15,7 +15,7 @@ export default function SwitchGroup({
         {label}
       </Label>
       <div className="flex items-center space-x-3">
-        <Switch id="exposed" {...props} checked={checked} />
+        <Switch {...props} checked={checked} />
         <span className="text-sm text-gray-600">{checked ? checkedInfo : unCheckedInfo}</span>
       </div>
     </div>

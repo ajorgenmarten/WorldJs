@@ -2,6 +2,7 @@ import { CreateStaticServiceRequest } from '@ports/services.ports'
 import { useState } from 'react'
 
 export default function useCreateStaticService() {
+  const [loading, setLoading] = useState(false)
   const [service, setService] = useState<CreateStaticServiceRequest>({
     name: '',
     port: 80,
@@ -67,12 +68,17 @@ export default function useCreateStaticService() {
   }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const data = await window.electron.ipcRenderer.invoke('services:add-static-service', service)
-    console.log(data)
+    setLoading(false)
+    if (data && data.success == false) {
+      alert(data.details.message || data.reason)
+    }
   }
 
   return {
     service,
+    loading,
     handleChange,
     handleExposed,
     handleSelectFolder,

@@ -7,5 +7,6 @@ export const ROUTES = {
   NEW_REDIS: '/new/redis',
   NEW_NATS: '/new/nats',
   ALL_SERVICES: '/all',
+  SERVICE_DETAIL: '/service/:id',
   SETTINGS: '/settings'
 }

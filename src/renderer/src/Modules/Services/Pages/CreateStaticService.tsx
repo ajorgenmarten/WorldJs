@@ -10,6 +10,7 @@ import EnvVars from '../Components/EnvVars'
 export default function CreateStaticService() {
   const {
     service,
+    loading,
     handleAddVar,
     handleRemoveVar,
     handleUpdateVar,
@@ -25,7 +26,7 @@ export default function CreateStaticService() {
       <Header title="Crear Sitio Estático" subtitle="Configura tu nuevo sitio web estático" />
 
       {/* Form */}
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} loading={loading}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputGroup
             id="name"
@@ -88,7 +89,8 @@ export default function CreateStaticService() {
           />
 
           <SwitchGroup
-            label="Servicio expuesto"
+            id="exposed"
+            label="Exponer servicio"
             checked={service.exposed}
             onCheckedChange={handleExposed}
             checkedInfo="Público (accesible desde internet)"

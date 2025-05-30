@@ -6,6 +6,7 @@ import SelectService from '@renderer/Modules/Services/Pages/SelectService'
 import CreateNodejsService from '@renderer/Modules/Services/Pages/CreateNodeJsService'
 import CreatePostgresService from '@renderer/Modules/Services/Pages/CreatePostgresService'
 import PageNotFound from '@renderer/Common/Components/PageNotFound'
+import ServiceDetails from '@renderer/Modules/Services/Pages/ViewDetails'
 
 const routes: RouteObject[] = [
   {
@@ -27,6 +28,10 @@ const routes: RouteObject[] = [
   {
     path: ROUTES.NEW_POSTGRES,
     element: <CreatePostgresService />
+  },
+  {
+    path: ROUTES.SERVICE_DETAIL,
+    element: <ServiceDetails />
   },
   {
     path: '*',

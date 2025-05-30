@@ -25,7 +25,7 @@ export default class CreateStaticService {
       data.envVars,
       data.publishDir
     )
-    this.ensure(service)
+    await this.ensure(service)
     const createDockerfile = this.createDockerfile(
       service.port,
       service.rootDir,
@@ -44,13 +44,15 @@ export default class CreateStaticService {
     const reigsterInDatabase = this.repository.create(service)
     service.url && (await this.writeInHostFile('add', service.url))
     await Promise.all([createDockerfile, createDockerCompose, createNginxConf, reigsterInDatabase])
+    await this.buildProject(service.folderPath, service.rootDir)
+    return service
   }
 
   async ensure(service: StaticService) {
     const existService = await this.repository.ensureCreation(service)
     if (existService) {
       if (existService.slug == service.slug) throw new ServiceAlreadyExist(service.slug)
-      if (existService.exposed && existService.port == service.port)
+      if (existService.exposed && service.exposed && existService.port == service.port)
         throw new Error(
           `No se puede crear un servicio expuesto con el puerto ${service.port} porque ya hay otro creado con este puerto`
         )
@@ -182,9 +184,20 @@ export default class CreateStaticService {
 
     const exePath = '../../resources/scripts/write-file.exe'
     const args = [action, url, path]
-    const command = `Start-Process -FilePath "${exePath}" -ArgumentList '${args.join("', '")}' -Verb RunAs -Wait -WindowStyle Hidden -PassThru | Out-String`
+    const winCommand = `Start-Process -FilePath "${exePath}" -ArgumentList '${args.join("', '")}' -Verb RunAs -Wait -WindowStyle Hidden -PassThru | Out-String`
     return new Promise((resolve, reject) => {
-      exec(`powershell -Command "${command}"`, { cwd: __dirname }, (err) => {
+      exec(`powershell -Command "${winCommand}"`, { cwd: __dirname }, (err) => {
+        if (err) reject(false)
+        resolve(true)
+      })
+    })
+  }
+
+  private async buildProject(folderPath: string, rootDir: string | null) {
+    const command = `docker compose up --build -d`
+    const cwd = posix.join(folderPath, rootDir || '')
+    return new Promise((resolve, reject) => {
+      exec(command, { cwd }, (err) => {
         if (err) reject(false)
         resolve(true)
       })

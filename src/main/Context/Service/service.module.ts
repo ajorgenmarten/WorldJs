@@ -1,9 +1,11 @@
 import { Module } from 'electron-di'
 import Dialogs from './Application/Diagos'
 import ServiceController from './service.controller'
-import { StaticServiceRepository } from './Domain/Ports/Outputs'
+import { ServiceRepository, StaticServiceRepository } from './Domain/Ports/Outputs'
 import { SQLiteStaticServiceRepository } from './Infrastructure/Repositories/SQLiteStaticServiceRepository'
 import CreateStaticService from './Application/CreateStaticService'
+import ViewDetails from './Application/ViewDetails'
+import SQLiteServiceRepository from './Infrastructure/Repositories/SQLiteServiceRepository'
 
 @Module({
   providers: [
@@ -11,8 +13,13 @@ import CreateStaticService from './Application/CreateStaticService'
       provide: StaticServiceRepository,
       useClass: SQLiteStaticServiceRepository
     },
+    {
+      provide: ServiceRepository,
+      useClass: SQLiteServiceRepository
+    },
     Dialogs,
-    CreateStaticService
+    CreateStaticService,
+    ViewDetails
   ],
   controllers: [ServiceController]
 })
